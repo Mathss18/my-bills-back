@@ -29,12 +29,12 @@ module.exports = {
     },
 
     async editar(req, res) {
-        const {id} = req.params;
+        const { id } = req.params;
         let { nome, saldo, logo } = req.body
-        const Banco = await Banco.findByPk(id);
+        const banco = await Banco.findByPk(id);
 
-        if (Banco == null)
-            return erro(req, res, "Não foi possível atualizar o  Banco "+id+", banco não encontrado");
+        if (id == null)
+            return erro(req, res, "Não foi possível atualizar o  Banco " + id + ", banco não encontrado");
 
         if (nome == '' || nome == null)
             return erro(req, res, "Não foi possível atualizar o banco: nome nulo ou vazio");
@@ -45,15 +45,16 @@ module.exports = {
         if (logo == '' || logo == null)
             return erro(req, res, "Não foi possível atualizar o banco: logo nulo ou vazio");
 
-        Banco.nome = nome
-        Banco.saldo = saldo
-        Banco.logo = logo
+        banco.nome = nome
+        banco.saldo = saldo
+        banco.logo = logo
 
-        const Banco_response = await Banco.save()
-        return res.status(200).json(Banco_response)
+        const bancoResponse = await banco.save()
+        return res.status(200).json(bancoResponse)
     },
 
     async cadastrar(req, res) {
+        //let logo = 'public/uploads/'+req.file.filename
         let { nome, saldo, logo, id_usuario } = req.body
 
         if (nome == '' || nome == null)
@@ -68,28 +69,28 @@ module.exports = {
         if (id_usuario == '' || id_usuario == null)
             return erro(req, res, "Não foi possível cadastrar o banco: id_usuario nulo ou vazio");
 
-        const Banco = await Banco.create({ nome, saldo, logo, id_usuario })
-        return res.status(200).json(Banco)
+        const banco = await Banco.create({ nome, saldo, logo, id_usuario })
+        return res.status(200).json(banco)
     },
 
     async excluir(req, res) {
         const { id } = req.params
-        const Banco = await Banco.findByPk(id)
+        const banco = await Banco.findByPk(id)
 
-        if (Banco == null)
-            return erro(req, res, "Não foi possível excluir o banco "+id+", banco não encontrado");
+        if (banco == null)
+            return erro(req, res, "Não foi possível excluir o banco " + id + ", banco não encontrado");
 
-        Banco.destroy()
-        return res.status(200).json(Banco)
+        const banco_response = await banco.destroy()
+        return res.status(200).json(banco_response)
     },
 
     async listarEspecifico(req, res) {
         const { id } = req.params
-        const Banco = await Banco.findByPk(id)
+        const banco = await Banco.findByPk(id)
 
-        if (Banco == null)
-            return erro(req, res, "Não foi possível recuperar os dados do banco "+id+", banco não encontrado");
+        if (banco == null)
+            return erro(req, res, "Não foi possível recuperar os dados do banco " + id + ", banco não encontrado");
 
-        return res.status(200).json(Banco)
+        return res.status(200).json(banco)
     },
 }

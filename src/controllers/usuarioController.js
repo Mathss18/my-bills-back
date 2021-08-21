@@ -95,7 +95,9 @@ module.exports = {
 
     async login(req, res) {
         let { email, senha } = req.body
+        
         const usuario = await sequelize.query("SELECT id, nome, email, foto FROM usuario WHERE email = '" + email + "' AND senha = '" + senha + "';", { type: sequelize.QueryTypes.SELECT });
+
         let token = '';
 
         if (usuario.length == 0)

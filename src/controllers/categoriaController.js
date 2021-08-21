@@ -20,21 +20,21 @@ function erro(req, res, msg) {
 
 module.exports = {
     async listar(req, res) {
-        const Categorias = await Categoria.findAll()
+        const categorias = await Categoria.findAll()
 
-        if (Categorias.length == 0)
+        if (categorias.length == 0)
             return erro(req, res, "Não existem Categorias cadastradas");
 
-        return res.status(200).json(Bancos)
+        return res.status(200).json(categorias)
     },
 
     async editar(req, res) {
-        const {id} = req.params;
+        const { id } = req.params;
         let { descricao, cor } = req.body
-        const Categoria = await Categoria.findByPk(id);
+        const categoria = await Categoria.findByPk(id);
 
-        if (Categoria == null)
-            return erro(req, res, "Não foi possível atualizar a categoria "+id+", categoria não encontrada");
+        if (id == null)
+            return erro(req, res, "Não foi possível atualizar a categoria " + id + ", categoria não encontrada");
 
         if (descricao == '' || descricao == null)
             return erro(req, res, "Não foi possível atualizar a categoria: descricao nula ou vazia");
@@ -42,11 +42,11 @@ module.exports = {
         if (cor == '' || cor == null)
             return erro(req, res, "Não foi possível atualizar a categoria: cor nula ou vazia");
 
-        Categoria.descricao = descricao
-        Categoria.cor = cor
+        categoria.descricao = descricao
+        categoria.cor = cor
 
-        const Categoria_response = await Categoria.save()
-        return res.status(200).json(Banco_response)
+        const categoria_response = await categoria.save()
+        return res.status(200).json(categoria_response)
     },
 
     async cadastrar(req, res) {
@@ -61,28 +61,28 @@ module.exports = {
         if (id_usuario == '' || id_usuario == null)
             return erro(req, res, "Não foi possível cadastrar a categoria: id_usuario nulo ou vazio");
 
-        const Categoria = await Categoria.create({ descricao, cor, id_usuario })
-        return res.status(200).json(Categoria)
+        const categoria = await Categoria.create({ descricao, cor, id_usuario })
+        return res.status(200).json(categoria)
     },
 
     async excluir(req, res) {
         const { id } = req.params
-        const Categoria = await Categoria.findByPk(id)
+        const categoria = await Categoria.findByPk(id)
 
-        if (Categoria == null)
-            return erro(req, res, "Não foi possível excluir a categoria "+id+", categoria não encontrada");
+        if (categoria == null)
+            return erro(req, res, "Não foi possível excluir a categoria " + id + ", categoria não encontrada");
 
-        Categoria.destroy()
-        return res.status(200).json(Categoria)
+        const categoria_response =  await categoria.destroy()
+        return res.status(200).json(categoria_response)
     },
 
     async listarEspecifico(req, res) {
         const { id } = req.params
-        const Categoria = await Categoria.findByPk(id)
+        const categoria = await Categoria.findByPk(id)
 
-        if (Categoria == null)
-            return erro(req, res, "Não foi possível recuperar os dados da categoria "+id+", categoria não encontrada");
+        if (categoria == null)
+            return erro(req, res, "Não foi possível recuperar os dados da categoria " + id + ", categoria não encontrada");
 
-        return res.status(200).json(Categoria)
+        return res.status(200).json(categoria)
     },
 }

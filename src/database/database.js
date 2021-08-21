@@ -17,9 +17,10 @@ const connection = new Squelize({
 
 });
 
-Usuario.init(connection)
-Categoria.init(connection)
 Banco.init(connection)
+Categoria.init(connection)
 Conta.init(connection)
+Usuario.init(connection)
+
 
 module.exports = connection;

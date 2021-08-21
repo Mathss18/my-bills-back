@@ -1,5 +1,8 @@
 const express = require('express');
 const UsuarioController = require('./controllers/usuarioController.js')
+const BancoController = require('./controllers/bancoController.js')
+const ContaController = require('./controllers/ContaController.js')
+const CategoriaController = require('./controllers/CategoriaController.js')
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 
@@ -27,7 +30,7 @@ function verifyJWT(req, res, next) {
         if (err) return erro(req, res, "Falha ao autorizar - token inválido");
 
         // se tudo estiver ok, salva no request para uso posterior
-        console.log(decoded);
+        //console.log(decoded);
         next();
     });
 }
@@ -65,7 +68,7 @@ routes.delete('/usuarios/:id', verifyJWT, (req, res) => {
 // ======================= Bancos ===============================
 // ======================= Listar =============================
 routes.get('/bancos', verifyJWT, (req, res) => {
-    BancoController.listar
+    BancoController.listar(req, res)
 })
 
 routes.get('/bancos/:id', verifyJWT, (req, res) => {
@@ -73,7 +76,7 @@ routes.get('/bancos/:id', verifyJWT, (req, res) => {
 })
 // ======================= Cadastrar/Editar ===================
 routes.post('/bancos', verifyJWT, (req, res) => {
-    BancoController.cadastrar
+    BancoController.cadastrar(req, res)
 })
 
 routes.put('/bancos/:id', verifyJWT, (req, res) => {
@@ -87,7 +90,7 @@ routes.delete('/bancos/:id', verifyJWT, (req, res) => {
 // ======================= Categorias ============================
 // ======================= Listar =============================
 routes.get('/categorias', verifyJWT, (req, res) => {
-    CategoriaController.listar
+    CategoriaController.listar(req, res)
 })
 
 routes.get('/categorias/:id', verifyJWT, (req, res) => {
@@ -95,7 +98,7 @@ routes.get('/categorias/:id', verifyJWT, (req, res) => {
 })
 // ======================= Cadastrar/Editar ===================
 routes.post('/categorias', verifyJWT, (req, res) => {
-    CategoriaController.cadastrar
+    CategoriaController.cadastrar(req, res)
 })
 
 routes.put('/categorias/:id', verifyJWT, (req, res) => {

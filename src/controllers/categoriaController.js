@@ -61,6 +61,16 @@ module.exports = {
         if (id_usuario == '' || id_usuario == null)
             return erro(req, res, "Não foi possível cadastrar a categoria: id_usuario nulo ou vazio");
 
+        const categoria_existe = await Categoria.findOne({ where: { descricao } });
+        
+        if(categoria_existe)
+            return erro(req, res, "Não foi possível cadastrar o categoria: nome categoria já existente");
+
+        const cor_existe = await Categoria.findOne({ where: { cor } });
+        
+        if(cor_existe)
+            return erro(req, res, "Não foi possível cadastrar o categoria: cor já existente");
+
         const categoria = await Categoria.create({ descricao, cor, id_usuario })
         return res.status(200).json(categoria)
     },

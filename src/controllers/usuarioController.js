@@ -56,9 +56,12 @@ module.exports = {
     },
 
     async cadastrar(req, res) {
-        let { nome, email, senha } = req.body
-        let foto = 'public/uploads/'+req.file.filename
+        let { nome, email, senha, repete_senha } = req.body
+        let foto = req.file ? 'public/uploads/'+req.file.filename : ''
 
+        if (repete_senha == '' || repete_senha == null)
+            return erro(req, res, "Não foi possível cadastrar o usuário: repete_senha nulo ou vazio");
+            
         if (nome == '' || nome == null)
             return erro(req, res, "Não foi possível cadastrar o usuário: nome nulo ou vazio");
 
@@ -67,6 +70,14 @@ module.exports = {
 
         if (senha == '' || senha == null)
             return erro(req, res, "Não foi possível cadastrar o usuário: senha nulo ou vazio");
+
+        if (repete_senha != senha)
+            return erro(req, res, "Não foi possível cadastrar o usuário: senha diferente de repete_senha");
+
+        const usuario_existe = await Usuario.findOne({ where: { email } });
+
+        if(usuario_existe)
+            return erro(req, res, "Não foi possível cadastrar o usuário: email já existente");
 
         const usuario = await Usuario.create({ nome, email, senha, foto })
         return res.status(200).json(usuario)

@@ -85,37 +85,28 @@ module.exports = {
         let { title, start, end, color, description, dataBaixa, tipo, situacao, id_categoria, id_banco, id_usuario } = req.body
 
         if (title == '' || title == null)
-            return erro(req, res, "Não foi possível atualizar a conta: title nula ou vazia");
+            return erro(req, res, "Não foi possível cadastrar a conta: title nula ou vazia");
 
         if (start == '' || start == null)
-            return erro(req, res, "Não foi possível atualizar a conta: start nula ou vazia");
-
-        if (end == '' || end == null)
-            return erro(req, res, "Não foi possível atualizar a conta: end nula ou vazia");
+            return erro(req, res, "Não foi possível cadastrar a conta: start nula ou vazia");
 
         if (color == '' || color == null)
-            return erro(req, res, "Não foi possível atualizar a conta: color nula ou vazia");
+            return erro(req, res, "Não foi possível cadastrar a conta: color nula ou vazia");
 
-        if (description == '' || description == null)
-            return erro(req, res, "Não foi possível atualizar a conta: description nula ou vazia");
+        if (tipo == null)
+            return erro(req, res, "Não foi possível cadastrar a conta: tipo nula ou vazia");
 
-        if (dataBaixa == '' || dataBaixa == null)
-            return erro(req, res, "Não foi possível atualizar a conta: dataBaixa nula ou vazia");
-
-        if (tipo == '' || tipo == null)
-            return erro(req, res, "Não foi possível atualizar a conta: tipo nula ou vazia");
-
-        if (situacao == '' || situacao == null)
-            return erro(req, res, "Não foi possível atualizar a conta: situacao nula ou vazia");
+        if (situacao == null)
+            return erro(req, res, "Não foi possível cadastrar a conta: situacao nula ou vazia");
 
         if (id_categoria == '' || id_categoria == null)
-            return erro(req, res, "Não foi possível atualizar a conta: id_categoria nula ou vazia");
+            return erro(req, res, "Não foi possível cadastrar a conta: id_categoria nula ou vazia");
 
         if (id_banco == '' || id_banco == null)
-            return erro(req, res, "Não foi possível atualizar a conta: id_banco nula ou vazia");
+            return erro(req, res, "Não foi possível cadastrar a conta: id_banco nula ou vazia");
             
         if (id_usuario == '' || id_usuario == null)
-            return erro(req, res, "Não foi possível atualizar a conta: id_usuario nula ou vazia");
+            return erro(req, res, "Não foi possível cadastrar a conta: id_usuario nula ou vazia");
 
         const conta = await Conta.create({ title, start, end, color, description, dataBaixa, tipo, situacao, id_categoria, id_banco, id_usuario })
         return res.status(200).json(conta)

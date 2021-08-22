@@ -109,4 +109,26 @@ routes.delete('/categorias/:id', verifyJWT, (req, res) => {
     CategoriaController.excluir(req, res)
 })
 
+// ======================= Categorias ============================
+// ======================= Listar =============================
+routes.get('/contas', verifyJWT, (req, res) => {
+    ContaController.listar(req, res)
+})
+
+routes.get('/contas/:id', verifyJWT, (req, res) => {
+    ContaController.listarEspecifico(req, res)
+})
+// ======================= Cadastrar/Editar ===================
+routes.post('/contas', verifyJWT, (req, res) => {
+    ContaController.cadastrar(req, res)
+})
+
+routes.put('/contas/:id', verifyJWT, (req, res) => {
+    ContaController.editar(req, res)
+})
+// ======================= Deletar ===================
+routes.delete('/contas/:id', verifyJWT, (req, res) => {
+    ContaController.excluir(req, res)
+})
+
 module.exports = routes;

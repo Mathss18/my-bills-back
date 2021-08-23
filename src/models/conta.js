@@ -14,6 +14,7 @@ class Conta extends Model {
       id_categoria: DataTypes.INTEGER,
       id_banco: DataTypes.INTEGER,
       id_usuario: DataTypes.INTEGER,
+      valor: DataTypes.DOUBLE(9,2),
     }, {
       sequelize: connection,
       modelName: 'conta',

@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       saldo: {
-        type: Sequelize.STRING
+        type: Sequelize.DOUBLE(9,2),
       },
       logo: {
         type: Sequelize.STRING

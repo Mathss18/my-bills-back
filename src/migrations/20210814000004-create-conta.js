@@ -32,6 +32,9 @@ module.exports = {
       situacao: {
         type: Sequelize.INTEGER
       },
+      valor: {
+        type: Sequelize.DOUBLE(9,2),
+      },
       id_categoria: {
         type: Sequelize.INTEGER,
         allowNull: false,

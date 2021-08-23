@@ -109,10 +109,18 @@ routes.delete('/categorias/:id', verifyJWT, (req, res) => {
     CategoriaController.excluir(req, res)
 })
 
-// ======================= Categorias ============================
+// ======================= Contas ============================
 // ======================= Listar =============================
 routes.get('/contas', verifyJWT, (req, res) => {
     ContaController.listar(req, res)
+})
+
+routes.get('/contas/home', verifyJWT, (req, res) => {
+    ContaController.listarHome(req, res)
+})
+
+routes.get('/contas/home/chart', verifyJWT, (req, res) => {
+    ContaController.listarHomeChart(req, res)
 })
 
 routes.get('/contas/:id', verifyJWT, (req, res) => {
@@ -129,6 +137,12 @@ routes.put('/contas/:id', verifyJWT, (req, res) => {
 // ======================= Deletar ===================
 routes.delete('/contas/:id', verifyJWT, (req, res) => {
     ContaController.excluir(req, res)
+})
+
+// ======================= Relatorio ==========================
+// ======================= Listar =============================
+routes.get('/relatorio', verifyJWT, (req, res) => {
+    BancoController.relatorio(req, res)
 })
 
 module.exports = routes;

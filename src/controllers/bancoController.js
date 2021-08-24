@@ -88,6 +88,7 @@ module.exports = {
 
     async listarEspecifico(req, res) {
         const { id } = req.params
+        const { id_usuario } = req.body
         const banco = await Banco.findByPk(id)
 
         if (banco == null)
@@ -95,9 +96,28 @@ module.exports = {
 
         return res.status(200).json(banco)
     },
+
+    async listarBancosUsuario(req, res) {
+        const { id } = req.params
+        const bancos = await Banco.findAll({
+                where: {
+                    id_usuario: id
+                } 
+            })
+
+        if (bancos == null)
+            return erro(req, res, "Não foi possível recuperar os dados dos bancos para o usuario " + id + ", bancos não encontrados");
+
+        return res.status(200).json(bancos)
+    },
     
     async relatorio(req, res) {
-        const bancos = await Banco.findAll();
+        const { id } = req.params
+        const bancos = await Banco.findAll({
+                where: {
+                    id_usuario: id
+                } 
+            });
 
         for(let i = 0; i < bancos.length; i++){
             let pagar = await Conta.sum('valor', {

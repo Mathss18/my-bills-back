@@ -95,4 +95,18 @@ module.exports = {
 
         return res.status(200).json(categoria)
     },
+
+    async listarCategoriasUsuario(req, res) {
+        const { id } = req.params
+        const categorias = await Categoria.findAll({
+                where: {
+                    id_usuario: id
+                } 
+            })
+
+        if (categorias == null)
+            return erro(req, res, "Não foi possível recuperar os dados das categorias do usuario " + id + ", categorias não encontradas");
+
+        return res.status(200).json(categorias)
+    },
 }

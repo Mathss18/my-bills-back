@@ -74,6 +74,10 @@ routes.get('/bancos', verifyJWT, (req, res) => {
 routes.get('/bancos/:id', verifyJWT, (req, res) => {
     BancoController.listarEspecifico(req, res)
 })
+
+routes.get('/bancos/usuarios/:id', verifyJWT, (req, res) => {
+    BancoController.listarBancosUsuario(req, res)
+})
 // ======================= Cadastrar/Editar ===================
 routes.post('/bancos', verifyJWT, (req, res) => {
     BancoController.cadastrar(req, res)
@@ -96,6 +100,10 @@ routes.get('/categorias', verifyJWT, (req, res) => {
 routes.get('/categorias/:id', verifyJWT, (req, res) => {
     CategoriaController.listarEspecifico(req, res)
 })
+
+routes.get('/categorias/usuarios/:id', verifyJWT, (req, res) => {
+    CategoriaController.listarCategoriasUsuario(req, res)
+})
 // ======================= Cadastrar/Editar ===================
 routes.post('/categorias', verifyJWT, (req, res) => {
     CategoriaController.cadastrar(req, res)
@@ -115,16 +123,20 @@ routes.get('/contas', verifyJWT, (req, res) => {
     ContaController.listar(req, res)
 })
 
-routes.get('/contas/home', verifyJWT, (req, res) => {
+routes.get('/contas/home/:id', verifyJWT, (req, res) => {
     ContaController.listarHome(req, res)
 })
 
-routes.get('/contas/home/chart', verifyJWT, (req, res) => {
+routes.get('/contas/home/chart/:id', verifyJWT, (req, res) => {
     ContaController.listarHomeChart(req, res)
 })
 
 routes.get('/contas/:id', verifyJWT, (req, res) => {
     ContaController.listarEspecifico(req, res)
+})
+
+routes.get('/contas/usuarios/:id', verifyJWT, (req, res) => {
+    ContaController.listarContasUsuario(req, res)
 })
 // ======================= Cadastrar/Editar ===================
 routes.post('/contas', verifyJWT, (req, res) => {
@@ -141,7 +153,7 @@ routes.delete('/contas/:id', verifyJWT, (req, res) => {
 
 // ======================= Relatorio ==========================
 // ======================= Listar =============================
-routes.get('/relatorio', verifyJWT, (req, res) => {
+routes.get('/relatorio/:id', verifyJWT, (req, res) => {
     BancoController.relatorio(req, res)
 })
 

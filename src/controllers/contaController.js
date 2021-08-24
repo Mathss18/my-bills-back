@@ -31,12 +31,17 @@ module.exports = {
     },
     
     async listarHomeChart(req, res) {
-        console.log(req);
-        const bancos = await Banco.findAll({
-            attributes: [
-                'id', 'nome'
-            ],
-        });
+        const { id } = req.params
+        const bancos = await Banco.findAll(
+            {
+                attributes: [
+                    'id', 'nome'
+                ],
+                where: {
+                    id_usuario: id
+                }
+            }
+        );
 
         let contas_receber = [];
         let contas_pagar = [];
@@ -53,6 +58,7 @@ module.exports = {
                         }, 
                     },
                     tipo: 1,
+                    situacao: 0,
                     id_banco: bancos[i].dataValues.id
                 } 
             }))
@@ -65,6 +71,7 @@ module.exports = {
                         }, 
                     },
                     tipo: 0,
+                    situacao: 0,
                     id_banco: bancos[i].dataValues.id
                 } 
             }))
@@ -80,9 +87,25 @@ module.exports = {
     },
     
     async listarHome(req, res) {
-        const conta_receber = await Conta.sum('valor', { where: { start: moment().format('YYYY-MM-DD'), tipo: 1, situacao: 0 } });
+        const { id } = req.params
 
-        const conta_pagar = await Conta.sum('valor', { where: { start: moment().format('YYYY-MM-DD'), tipo: 0, situacao: 0 } });
+        const conta_receber = await Conta.sum('valor', {
+                where: {
+                    start: moment().format('YYYY-MM-DD'),
+                    tipo: 1,
+                    situacao: 0,
+                    id_usuario: id
+                    }
+                });
+
+        const conta_pagar = await Conta.sum('valor', {
+                where: {
+                    start: moment().format('YYYY-MM-DD'),
+                    tipo: 0,
+                    situacao: 0,
+                    id_usuario: id
+                    }
+                });
 
         const pagar = await Conta.sum('valor', {
             where: {
@@ -92,7 +115,8 @@ module.exports = {
                         [Sequelize.Op.lte]: moment().endOf('month').format('YYYY-MM-DD')
                     }, 
                 },
-                tipo: 0 
+                tipo: 0,
+                id_usuario: id
             } 
         });
 
@@ -104,7 +128,8 @@ module.exports = {
                         [Sequelize.Op.lte]: moment().endOf('month').format('YYYY-MM-DD')
                     }, 
                 },
-                tipo: 1
+                tipo: 1,
+                id_usuario: id
             } 
         });
 
@@ -290,5 +315,19 @@ module.exports = {
             return erro(req, res, "Não foi possível recuperar os dados da conta "+id+", conta não encontrada");
 
         return res.status(200).json(conta)
+    },
+
+    async listarContasUsuario(req, res) {
+        const { id } = req.params
+        const contas = await Conta.findAll({
+                where: {
+                    id_usuario: id
+                } 
+            })
+
+        if (contas == null)
+            return erro(req, res, "Não foi possível recuperar os dados das contas do usuario "+id+", contas não encontradas");
+
+        return res.status(200).json(contas)
     },
 }

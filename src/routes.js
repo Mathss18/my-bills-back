@@ -27,10 +27,13 @@ function verifyJWT(req, res, next) {
     if (!token) return erro(req, res, "Falha ao autorizar - token não enviado");
 
     jwt.verify(token, 'segredo', function (err, decoded) {
-        if (err) return erro(req, res, "Falha ao autorizar - token inválido");
-
-        // se tudo estiver ok, salva no request para uso posterior
-        //console.log(decoded);
+        if (err) {
+            console.log(err);
+            return erro(req, res, "Falha ao autorizar - token inválido");
+        }
+        
+        
+        
         next();
     });
 }
@@ -74,6 +77,10 @@ routes.get('/bancos', verifyJWT, (req, res) => {
 routes.get('/bancos/:id', verifyJWT, (req, res) => {
     BancoController.listarEspecifico(req, res)
 })
+
+routes.get('/bancos/usuarios/:id', verifyJWT, (req, res) => {
+    BancoController.listarBancosUsuario(req, res)
+})
 // ======================= Cadastrar/Editar ===================
 routes.post('/bancos', verifyJWT, (req, res) => {
     BancoController.cadastrar(req, res)
@@ -96,6 +103,10 @@ routes.get('/categorias', verifyJWT, (req, res) => {
 routes.get('/categorias/:id', verifyJWT, (req, res) => {
     CategoriaController.listarEspecifico(req, res)
 })
+
+routes.get('/categorias/usuarios/:id', verifyJWT, (req, res) => {
+    CategoriaController.listarCategoriasUsuario(req, res)
+})
 // ======================= Cadastrar/Editar ===================
 routes.post('/categorias', verifyJWT, (req, res) => {
     CategoriaController.cadastrar(req, res)
@@ -109,14 +120,26 @@ routes.delete('/categorias/:id', verifyJWT, (req, res) => {
     CategoriaController.excluir(req, res)
 })
 
-// ======================= Categorias ============================
+// ======================= Contas ============================
 // ======================= Listar =============================
 routes.get('/contas', verifyJWT, (req, res) => {
     ContaController.listar(req, res)
 })
 
+routes.get('/contas/home/:id', verifyJWT, (req, res) => {
+    ContaController.listarHome(req, res)
+})
+
+routes.get('/contas/home/chart/:id', verifyJWT, (req, res) => {
+    ContaController.listarHomeChart(req, res)
+})
+
 routes.get('/contas/:id', verifyJWT, (req, res) => {
     ContaController.listarEspecifico(req, res)
+})
+
+routes.get('/contas/usuarios/:id', verifyJWT, (req, res) => {
+    ContaController.listarContasUsuario(req, res)
 })
 // ======================= Cadastrar/Editar ===================
 routes.post('/contas', verifyJWT, (req, res) => {
@@ -129,6 +152,12 @@ routes.put('/contas/:id', verifyJWT, (req, res) => {
 // ======================= Deletar ===================
 routes.delete('/contas/:id', verifyJWT, (req, res) => {
     ContaController.excluir(req, res)
+})
+
+// ======================= Relatorio ==========================
+// ======================= Listar =============================
+routes.get('/relatorio/:id', verifyJWT, (req, res) => {
+    BancoController.relatorio(req, res)
 })
 
 module.exports = routes;

@@ -115,7 +115,7 @@ module.exports = {
             return erro(req, res, "Falha ao autenticar");
 
         token = jwt.sign({ ...usuario[0] }, 'segredo', {
-            expiresIn: 86400 // expires in 1 day
+            //expiresIn: 864000 // expires in 1 day
         });
 
         return res.status(200).json({

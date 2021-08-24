@@ -1,6 +1,8 @@
+const Conta = require('../models/conta')
 const Banco = require('../models/banco')
 const Sequelize = require('sequelize');
 const jwt = require('jsonwebtoken');
+const moment = require('moment');
 
 const sequelize = new Sequelize('mybills', 'root', '', {
     host: 'localhost',
@@ -86,11 +88,88 @@ module.exports = {
 
     async listarEspecifico(req, res) {
         const { id } = req.params
+        const { id_usuario } = req.body
         const banco = await Banco.findByPk(id)
 
         if (banco == null)
             return erro(req, res, "Não foi possível recuperar os dados do banco " + id + ", banco não encontrado");
 
         return res.status(200).json(banco)
+    },
+
+    async listarBancosUsuario(req, res) {
+        const { id } = req.params
+        const bancos = await Banco.findAll({
+                where: {
+                    id_usuario: id
+                } 
+            })
+
+        if (bancos == null)
+            return erro(req, res, "Não foi possível recuperar os dados dos bancos para o usuario " + id + ", bancos não encontrados");
+
+        return res.status(200).json(bancos)
+    },
+    
+    async relatorio(req, res) {
+        const { id } = req.params
+        const bancos = await Banco.findAll({
+                where: {
+                    id_usuario: id
+                } 
+            });
+
+        for(let i = 0; i < bancos.length; i++){
+            let pagar = await Conta.sum('valor', {
+                where: {
+                    start: { 
+                        [Sequelize.Op.and]: {
+                            [Sequelize.Op.gt]: moment().format('YYYY-MM-DD'), 
+                        }, 
+                    },
+                    tipo: 0,
+                    id_banco: bancos[i].dataValues.id
+                } 
+            });
+            let receber = await Conta.sum('valor', {
+                where: {
+                    start: { 
+                        [Sequelize.Op.and]: {
+                            [Sequelize.Op.gt]: moment().format('YYYY-MM-DD'), 
+                        }, 
+                    },
+                    tipo: 1,
+                    id_banco: bancos[i].dataValues.id
+                } 
+            })
+            bancos[i].dataValues.saldo_previsto = bancos[i].dataValues.saldo + receber - pagar;
+            let pagar_mes = await Conta.sum('valor', {
+                where: {
+                    start: { 
+                        [Sequelize.Op.and]: {
+                            [Sequelize.Op.gt]: moment().format('YYYY-MM-DD'), 
+                            [Sequelize.Op.lte]: moment().add(1, 'months').format('YYYY-MM-DD'),
+                        }, 
+                    },
+                    tipo: 0,
+                    id_banco: bancos[i].dataValues.id
+                } 
+            });
+            let receber_mes = await Conta.sum('valor', {
+                where: {
+                    start: { 
+                        [Sequelize.Op.and]: {
+                            [Sequelize.Op.gt]: moment().format('YYYY-MM-DD'), 
+                            [Sequelize.Op.lte]: moment().add(1, 'months').format('YYYY-MM-DD'), 
+                        }, 
+                    },
+                    tipo: 1,
+                    id_banco: bancos[i].dataValues.id
+                } 
+            })
+            bancos[i].dataValues.saldo_mes = bancos[i].dataValues.saldo + receber_mes - pagar_mes;
+        }
+
+        return res.status(200).json(bancos)
     },
 }

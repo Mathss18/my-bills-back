@@ -29,12 +29,12 @@ module.exports = {
     },
 
     async editar(req, res) {
-        const {id} = req.params;
+        const { id } = req.params;
         let { title, start, end, color, description, dataBaixa, tipo, situacao, id_categoria, id_banco } = req.body
         const conta = await Conta.findByPk(id);
 
         if (conta == null)
-            return erro(req, res, "Não foi possível atualizar a conta "+id+", conta não encontrada");
+            return erro(req, res, "Não foi possível atualizar a conta " + id + ", conta não encontrada");
 
         if (title == '' || title == null)
             return erro(req, res, "Não foi possível atualizar a conta: title nula ou vazia");
@@ -104,7 +104,7 @@ module.exports = {
 
         if (id_banco == '' || id_banco == null)
             return erro(req, res, "Não foi possível cadastrar a conta: id_banco nula ou vazia");
-            
+
         if (id_usuario == '' || id_usuario == null)
             return erro(req, res, "Não foi possível cadastrar a conta: id_usuario nula ou vazia");
 
@@ -117,7 +117,7 @@ module.exports = {
         const conta = await Conta.findByPk(id)
 
         if (conta == null)
-            return erro(req, res, "Não foi possível excluir a conta "+id+", conta não encontrada");
+            return erro(req, res, "Não foi possível excluir a conta " + id + ", conta não encontrada");
 
         conta.destroy()
         return res.status(200).json(conta)
@@ -128,7 +128,7 @@ module.exports = {
         const conta = await Conta.findByPk(id)
 
         if (conta == null)
-            return erro(req, res, "Não foi possível recuperar os dados da conta "+id+", conta não encontrada");
+            return erro(req, res, "Não foi possível recuperar os dados da conta " + id + ", conta não encontrada");
 
         return res.status(200).json(conta)
     },
